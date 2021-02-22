@@ -20,6 +20,11 @@
 
 #define BRIGHTNESS_PATH "/sys/class/backlight/panel0-backlight/brightness"
 
+#define DISPPARAM_PATH "/sys/devices/platform/soc/ae00000.qcom,mdss_mdp/drm/card0/card0-DSI-1/disp_param"
+#define DISPPARAM_HBM_FOD_ON "0x20000"
+#define DISPPARAM_HBM_FOD_OFF "0xE0000"
+#define FINGERPRINT_ERROR_VENDOR 8
+
 namespace vendor {
 namespace lineage {
 namespace biometrics {
@@ -82,7 +87,7 @@ Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t v
 
 Return<bool> FingerprintInscreen::handleError(int32_t error, int32_t vendorCode) {
     LOG(ERROR) << "error: " << error << ", vendorCode: " << vendorCode;
-    return false;
+    return error == FINGERPRINT_ERROR_VENDOR && vendorCode == 6;
 }
 
 Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
